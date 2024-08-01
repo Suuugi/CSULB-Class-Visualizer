@@ -26,4 +26,5 @@ def get_class_subjects_files():
         req = requests.get(subject_url)
         subject_file.write(req.text)
 
+get_class_subject_index_file()
 get_class_subjects_files()
