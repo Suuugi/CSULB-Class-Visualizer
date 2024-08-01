@@ -1,7 +1,7 @@
 import os, requests, bs4
 
 by_subject_url = "https://web.csulb.edu/depts/enrollment/registration/class_schedule/Fall_2024/By_Subject"
-index_url = f"{by_subject_url}\\index.html"
+index_url = f"{by_subject_url}/index.html"
 
 assets_path = f"{os.path.dirname(__file__)}\\assets"
 subjects_file = f"{assets_path}\\Subjects.html"
