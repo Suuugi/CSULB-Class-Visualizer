@@ -20,7 +20,7 @@ def get_subjects():
     for subject in subject_soup.findChildren("ul"):
       subject_file_name = subject.find('a')['href']
       subject_url = f"{by_subject_url}/{subject_file_name}"
-      file.write(f"{subject_url}\n")
+      file.write(f"{subject_file_name}\n")
 
       with open(f"{assets_path}\\{subject_file_name}", "w") as subject_file:
         req = requests.get(subject_url)
