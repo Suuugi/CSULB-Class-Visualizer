@@ -7,12 +7,12 @@ assets_path = f"{os.path.dirname(__file__)}\\assets"
 subjects_file = f"{assets_path}\\Subjects.html"
 subject_list_file = f"{assets_path}\\Subjects.txt"
 
-def get_class_subject_index_file():
+def get_subject_index_file():
   req = requests.get(index_url)
   with open(subjects_file, 'w') as file:
     file.write(req.text)
 
-def get_class_subjects_files():
+def get_subjects():
   with open(subjects_file, 'r') as file:
     subject_soup = bs4.BeautifulSoup(file, "html.parser", parse_only=bs4.SoupStrainer(class_="indexList"))
   
@@ -26,5 +26,5 @@ def get_class_subjects_files():
         req = requests.get(subject_url)
         subject_file.write(req.text)
 
-get_class_subject_index_file()
-get_class_subjects_files()
+get_subject_index_file()
+get_subjects()
