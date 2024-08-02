@@ -1,18 +1,7 @@
-Build 0.1
+Build 0.2
 =========
 
 Subject [1..*] Courses [1..*] Classes
-
-Requirements...
-python3
-virtualenv
-requests
-beautifulsoup4
-
-Housekeeping...
-- Update Execution Policy for venv = Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
-- Enable Virtual Environment = <path>\CSULB-Class-Visualizer\CSULB-Subjects-Scraper\venv\Scripts\activate.ps1
-- Install Virtual Environment = pip install -r <path>\CSULB-Class-Visualizer\CSULB-Subjects-Scraper\requirements.txt
 
 Logic...
 1. I used python's request library to pull the website of all course subjects and saved it into a html file (that way I don't keep querying the website).
