@@ -5,8 +5,27 @@ After, it loops and puts the class information into a class_arr to be put in a d
 import os
 import bs4
 
-ASSETS_PATH = f"{os.path.dirname(__file__)}\\assets"
-CLASSES_LIST = f"{ASSETS_PATH}/Classes.csv"
+SCRAPER_ASSETS_PATH = f"{os.path.dirname(__file__)}/assets"
+LOAD_DB_ASSETS_PATH = f"{os.path.abspath(os.path.join(
+    __file__, "../../"))}/CSULB-Load-Database/assets"
+SUBJECTS_TXT = f"{SCRAPER_ASSETS_PATH}/Subjects.txt"
+SUBJECTS_LIST = f"{LOAD_DB_ASSETS_PATH}/ScrapedSubjects.txt"
+COURSES_LIST = f"{LOAD_DB_ASSETS_PATH}/ScrapedCourses.txt"
+CLASSES_LIST = f"{LOAD_DB_ASSETS_PATH}/ScrapedClasses.txt"
+
+
+def __init__():
+    """
+    Setup DB assets directory. If it exists, remove SUBJECTS_LIST, COURSES_LIST, and CLASSES_LIST.
+    """
+    if not os.path.exists(LOAD_DB_ASSETS_PATH):
+        os.makedirs(LOAD_DB_ASSETS_PATH)
+    if os.path.exists(SUBJECTS_LIST):
+        os.remove(SUBJECTS_LIST)
+    if os.path.exists(COURSES_LIST):
+        os.remove(COURSES_LIST)
+    if os.path.exists(CLASSES_LIST):
+        os.remove(CLASSES_LIST)
 
 
 def parse_subject_file(subject):
@@ -17,37 +36,31 @@ def parse_subject_file(subject):
     output:
       - Looping class_arr to be transformed and put into a database
     """
-    with open(f"{ASSETS_PATH}\\{subject}", 'r', encoding="UTF-8") as file:
-        with open(f"{CLASSES_LIST}", 'a', encoding="UTF-8") as class_file:
+    with open(f"{SCRAPER_ASSETS_PATH}/{subject}", 'r', encoding="UTF-8") as file:
+        soup = bs4.BeautifulSoup(file, "html.parser")
 
-            soup = bs4.BeautifulSoup(file, "html.parser")
-            course_blocks = soup.find_all("div", class_="courseBlock")
+        with open(f"{SUBJECTS_LIST}", 'a', encoding="UTF-8") as subject_file:
+            subject_file.write(f"{
+                soup.find("h2", class_="departmentTitle").string}|\n")
 
-            for block in course_blocks:
+        course_blocks = soup.find_all("div", class_="courseBlock")
+        for block in course_blocks:
+            with open(f"{COURSES_LIST}", 'a', encoding="UTF-8") as course_file:
+                course_code = block.find(class_="courseCode").string
+                course_title = block.find(class_="courseTitle").string
+
+                course_file.write(f"{course_code}|")
+                course_file.write(f"{course_title}|\n")
+
+            with open(f"{CLASSES_LIST}", 'a', encoding="UTF-8") as class_file:
                 course_entry = block.find_all("tr")
 
-                # [<tr><th scope="col">SEC.</th><th scope="col">CLASS #</th><th scope="col">NO MATERIAL <br/> COST </th><th scope="col">RESERVE <br/> CAPACITY </th><th scope="col">CLASS NOTES</th><th scope="col">TYPE</th><th scope="col">DAYS</th><th scope="col">TIME</th><th scope="col">OPEN SEATS <br/> as of 07/31 05:02:21</th><th scope="col">LOCATION</th><th scope="col">INSTRUCTOR</th><th scope="col">COMMENT</th></tr>, <tr><th scope="row">03</th><td>10259</td><td></td><td><div class="dot"><a border="0" href="https://www.csulb.edu/student-records/reserved-seats-reserve-capacity-faqs"><img alt="Reserve Capacity" height="55" src="https://www.csulb.edu/sites/default/files/u33991/reserve_capacity_icon_2.png" title="Reserve Capacity" width="55"/></a></div></td><td><a href="#note1">309</a></td><td>SEM</td><td>Th</td><td>6-8:45PM</td><td><div class="dot"><a border="0" href="https://www.csulb.edu/student-records/reserved-seats-reserve-capacity-faqs"><img alt="Reserve Capacity" height="16" src="https://web.csulb.edu/depts/enrollment/registration/assets/yellow_dot.png" title="Reserve Capacity" width="16"/></a></div></td><td>ONLINE-ONLY</td><td>Huang X</td><td>Class instruction is: Online - Mixed Meet Times.<br/>Class enrollment for OMBA students only. Please contact cob-gradprograms@csulb.edu if you have questions.</td></tr>, <tr><th scope="row">03</th><td></td><td></td><td></td><td></td><td></td><td>NA</td><td>NA</td><td></td><td>ONLINE-ONLY</td><td>Huang X</td><td>additional meeting detail</td></tr>]
                 for course_row in course_entry[1:]:
+                    class_file.write(f"{course_code}|")
 
-                    class_file.write(
-                        f"{block.find(class_="courseCode").string},")
-                    class_file.write(
-                        f"{block.find(class_="courseTitle").string},")
-
-                    # SEC = 01
-                    # CLASS = None
-                    # NO MATERIAL COST = None
-                    # RESERVE CAPACITY = None
-                    # CLASS NOTES = None
-                    # TYPE = None
-                    # DAYS = Th
-                    # TIME = 6-9:45PM
-                    # OPEN SEATS = None
-                    # LOCATION = ONLINE-ONLY
-                    # INSTRUCTOR = Staff
-                    # COMMENT = additional meeting detail
                     for course_cell in course_row:
-                        class_file.write(f"{course_cell.string},")
+                        class_file.write(f"{course_cell.string}|")
+
                     class_file.write("\n")
 
 
@@ -57,12 +70,14 @@ def get_classes():
     input:
       - assets/Subjects.txt
     """
-    if os.path.exists(CLASSES_LIST):
-        os.remove(CLASSES_LIST)
-
-    with open(f"{ASSETS_PATH}\\Subjects.txt", 'r', encoding="UTF-8") as file:
+    with open(f"{SUBJECTS_TXT}", 'r', encoding="UTF-8") as file:
         for subject in file:
             parse_subject_file(subject.strip())
 
 
-get_classes()
+# Force user to run scrape_subjects.py first.
+if os.path.exists(SUBJECTS_TXT):
+    __init__()
+    get_classes()
+else:
+    print("Please run scrape_subjects.py first.")

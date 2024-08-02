@@ -19,4 +19,7 @@ https://web.csulb.edu/depts/enrollment/registration/class_schedule/Fall_2024/By_
 
 6. Build and output the row with the results and save into Classese.csv to be inputted into a DB later.
 
-Results(with all parsed data): Classes.csv 
+Results(with all parsed data): 
+CSULB-Load-Database/assets/ScrapedClasses.txt
+CSULB-Load-Database/assets/ScrapedCourses.txt
+CSULB-Load-Database/assets/ScrapedSubjects.txt

@@ -6,10 +6,18 @@ import os
 import requests
 import bs4
 
-INDEX_URL = "https://web.csulb.edu/depts/enrollment/registration/class_schedule/Fall_2024/By_Subject"
-ASSETS_PATH = f"{os.path.dirname(__file__)}/assets"
-SUBJECTS_HTML = f"{ASSETS_PATH}/Subjects.html"
-SUBJECTS_LIST = f"{ASSETS_PATH}/Subjects.txt"
+INDEX_URL = "https://web.csulb.edu/depts/enrollment/registration/class_schedule/Fall_2024/By_Subject/"
+SCRAPER_ASSETS_PATH = f"{os.path.dirname(__file__)}/assets"
+SUBJECTS_HTML = f"{SCRAPER_ASSETS_PATH}/Subjects.html"
+SUBJECTS_TXT = f"{SCRAPER_ASSETS_PATH}/Subjects.txt"
+
+
+def __init__():
+    """
+    Setup assets directory.
+    """
+    if not os.path.exists(SCRAPER_ASSETS_PATH):
+        os.makedirs(SCRAPER_ASSETS_PATH)
 
 
 def get_index_file():
@@ -19,9 +27,6 @@ def get_index_file():
       - assets/Subjects.html
     """
     req = requests.get(INDEX_URL)
-
-    if not os.path.exists(ASSETS_PATH):
-        os.makedirs(ASSETS_PATH)
 
     with open(SUBJECTS_HTML, 'w', encoding="UTF-8") as file:
         file.write(req.text)
@@ -40,7 +45,7 @@ def get_subject_files():
         subjects_soup = bs4.BeautifulSoup(
             file, "html.parser", parse_only=bs4.SoupStrainer(class_="indexList"))
 
-    with open(SUBJECTS_LIST, 'w', encoding="UTF-8") as file:
+    with open(SUBJECTS_TXT, 'w', encoding="UTF-8") as file:
         for subject in subjects_soup.findChildren("ul"):
             # <ul>
             # <li><a href="BIOL.html">Biology (BIOL)</a></li>
@@ -49,18 +54,16 @@ def get_subject_files():
             # <li><a href="CBA.html">Business, College of (pre F24) (CBA)</a></li>
             # </ul>
 
-            # subject_file_name = BIOL.html
             subject_file_name = subject.find('a')['href']
             subject_url = f"{INDEX_URL}/{subject_file_name}"
 
-            # Write to subjects_list
             file.write(f"{subject_file_name}\n")
 
-            # Write to subject_file
-            with open(f"{ASSETS_PATH}/{subject_file_name}", "w", encoding="UTF-8") as subject_file:
+            with open(f"{SCRAPER_ASSETS_PATH}/{subject_file_name}", "w", encoding="UTF-8") as subject_file:
                 req = requests.get(subject_url)
                 subject_file.write(req.text)
 
 
+__init__()
 get_index_file()
 get_subject_files()
