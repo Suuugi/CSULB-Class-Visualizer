@@ -3,10 +3,18 @@ Build 0.1
 
 Subject [1..*] Courses [1..*] Classes
 
+Requirements...
+python3
+virtualenv
+requests
+beautifulsoup4
 
-0. Enable Virtual Environment = C:\Users\nlsug\OneDrive\Documents\Workspace\college-classes\1-scrape-html\venv\Scripts\activate.ps1
-0. Install Virtual Environment = pip install -r C:\Users\nlsug\OneDrive\Documents\Workspace\college-classes\requirements.txt
+Housekeeping...
+- Update Execution Policy for venv = Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+- Enable Virtual Environment = <path>\CSULB-Class-Visualizer\CSULB-Subjects-Scraper\venv\Scripts\activate.ps1
+- Install Virtual Environment = pip install -r <path>\CSULB-Class-Visualizer\CSULB-Subjects-Scraper\requirements.txt
 
+Logic Process...
 1. I used python's request library to pull the website of all course subjects and saved it into a html file (that way I don't keep querying the website).
 https://web.csulb.edu/depts/enrollment/registration/class_schedule/Fall_2024/By_Subject/index.html
 

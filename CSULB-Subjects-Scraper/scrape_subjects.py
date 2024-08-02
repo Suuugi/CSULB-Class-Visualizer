@@ -19,6 +19,10 @@ def get_index_file():
       - assets/Subjects.html
     """
     req = requests.get(INDEX_URL)
+
+    if not os.path.exists(ASSETS_PATH):
+        os.makedirs(ASSETS_PATH)
+
     with open(SUBJECTS_HTML, 'w', encoding="UTF-8") as file:
         file.write(req.text)
 
