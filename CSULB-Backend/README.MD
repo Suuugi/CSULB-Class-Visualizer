@@ -5,9 +5,11 @@ requests
 beautifulsoup4
 psycopg2
 
-Housekeeping...
-- Install venv: pip install virtualenv
-- Create venv for backend: python -m venv venv
-- Update Execution Policy for venv = Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
-- Enable Virtual Environment = <path>\CSULB-Class-Visualizer\CSULB-Backend\venv\Scripts\Activate.ps1
-- Install Virtual Environment = pip install -r <path>\CSULB-Class-Visualizer\CSULB-Backend\requirements.txt
+Execution Order
+1. Install venv: pip install virtualenv
+2. Create venv for backend: python -m venv venv
+3. Update Execution Policy for venv = Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+4.  Enable Virtual Environment = <path>\CSULB-Class-Visualizer\CSULB-Backend\venv\Scripts\Activate.ps1
+5. Install Virtual Environment = pip install -r <path>\CSULB-Class-Visualizer\CSULB-Backend\requirements.txt
+6. CSULB-Classes-Scraper/scrape_subjects.py
+7. CSULB-Classes-Scraper/scrape_classes.py
