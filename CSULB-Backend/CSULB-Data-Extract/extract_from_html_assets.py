@@ -81,7 +81,7 @@ def extract_subjects_from_subjects_html(subject):
 
         # Get Courses and Classes Extract
         course_blocks = soup.find_all("div", class_="courseBlock")
-        with open(f"{COURSES_EXTRACT}", "w", encoding="UTF-8") as course_file, open(f"{CLASSES_EXTRACT}", "w", encoding="UTF-8") as classes_file:
+        with open(f"{COURSES_EXTRACT}", "a", encoding="UTF-8") as course_file, open(f"{CLASSES_EXTRACT}", "a", encoding="UTF-8") as classes_file:
             for course in course_blocks:
 
                 # Get Courses Extract
@@ -118,7 +118,8 @@ def extract_classrooms_from_classrooms_html():
         department_blocks = soup.find_all("button", class_="collapsed")
         with open(f"{DEPARTMENTS_EXTRACT}", "w", encoding="UTF-8") as departments_file:
             for department in department_blocks:
-                departments_file.write(department.text.strip())
+                departments_file.write(
+                    f"{department.text.strip()}\n")
 
         # Get Classrooms Extract
         classroom_blocks = soup.find_all("tbody")
